@@ -1,34 +1,27 @@
+import PublicationTitle from "./publication-title";
+import PublicationDescription from "./publication-description";
+import PublicationAuthor from "./publication-author";
+
 
 export default class Publication {
-    public title: string;
-    public description: string;
-    public author: string;
+    public title: PublicationTitle;
+    public description: PublicationDescription;
+    public author: PublicationAuthor;
 
-    constructor(title: string, description: string, author: string) {
-        this.isValidTitle(title);
+    constructor(title: PublicationTitle, description: PublicationDescription, author: PublicationAuthor) {
         this.title = title;
-        this.isValidDescription(description);
         this.description = description;
-        this.isValidAuthor(author);
         this.author = author;
     }
 
-    private isValidTitle(title: string): void {
-        if (title.length < 2) {
-            throw new Error("Title must be at least 2 characters")
-        }
+    public static create(title: string, description: string, author: string) {
+        const publication = new Publication(
+            new PublicationTitle(title),
+            new PublicationDescription(description),
+            new PublicationAuthor(author)
+        );
+        return publication;
     }
 
-    private isValidDescription(description: string): void {
-        if (description.length < 5) {
-            throw new Error("Description must be at least 5 characters")
-        }
-    }
-
-    private isValidAuthor(author: string): void {
-        if (author.length < 2) {
-            throw new Error("Author must be at least 2 characters")
-        }
-    }
 
 }
