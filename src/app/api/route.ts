@@ -1,13 +1,16 @@
-import next from "next";
 import { NextRequest, NextResponse } from "next/server";
-import Publication from "@/utils/publication";
 import PublicationRegister from "@/utils/publication-register";
+import PostgresPublicationRepository from "@/utils/postgres-publication-repository";
+import InMemoryPublicationRepository from "@/utils/in-memory-publication-repository";
+
 
 export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
-        const register = new PublicationRegister();
-        await register.save(data.title, data.description, data.author);
+        const repository = new PostgresPublicationRepository();
+        // const repository = new InMemoryPublicationRepository();
+        const register = new PublicationRegister(repository);
+        await register.run(data.title, data.description, data.author);
 
         return NextResponse.json({
             message: 'The post has been saved successfully'
@@ -20,4 +23,3 @@ export async function POST(request: NextRequest) {
         }, { status: 500 });
     }
 }
-
