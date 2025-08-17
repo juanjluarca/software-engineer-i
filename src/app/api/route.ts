@@ -22,6 +22,8 @@ export async function POST(request: NextRequest) {
         const connectionString = process.env.DATABASE_URL as string;
         const sql = postgres(connectionString);
 
+        await sql`INSERT INTO publication (title, description, author) VALUES (${title}, ${description}, ${author});`;
+
 
         return NextResponse.json({
             message: 'All fields are valid and the connection with db is success'
