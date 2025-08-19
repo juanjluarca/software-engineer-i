@@ -26,4 +26,17 @@ export default class PostgresPublicationRepository implements PublicationReposit
             throw new Error("Failed to save publication");
         }
     }
+    async getPublications(): Promise<Publication[]> {
+        try {
+            const rows = await this.sql`SELECT * FROM publication;`
+            return rows.map(row => new Publication(
+                row.title,
+                row.description,
+                row.author
+            ));
+        } catch {
+            throw new Error("Failed to obtain the publications");
+        }
+    }
+
 }

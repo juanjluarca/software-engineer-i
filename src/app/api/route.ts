@@ -11,7 +11,6 @@ export async function POST(request: NextRequest) {
         // const repository = new InMemoryPublicationRepository();
         const register = new PublicationRegister(repository);
         await register.run(data.title, data.description, data.author);
-
         return NextResponse.json({
             message: 'The post has been saved successfully'
         });
@@ -22,4 +21,24 @@ export async function POST(request: NextRequest) {
             error: 'Failed to save the post',
         }, { status: 500 });
     }
+}
+
+// Inyeccion de dependencias
+export async function GET() {
+    try {
+        const repository = new PostgresPublicationRepository();
+        const data = await repository.getPublications();
+
+        return NextResponse.json({
+            success: true,
+            publications: data,
+        });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json(
+            { success: false, message: "Failed to fetch publications" },
+            { status: 500 }
+        );
+    }
+
 }

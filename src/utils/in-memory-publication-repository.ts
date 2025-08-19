@@ -17,5 +17,6 @@ export default class InMemoryPublicationRepository implements PublicationReposit
         const description = publication.description.value;
         const author = publication.author.value;
         this.publications.push({ title, description, author });
+        console.log(this.publications.length);
     }
 }
