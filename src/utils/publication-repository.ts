@@ -2,5 +2,6 @@ import Publication from "./publication";
 
 
 export default interface PublicationRepository {
-    save(publication: Publication): Promise<void>;
+    savePublication(publication: Publication): Promise<void>;
+    updatePublication(id: string, data: Partial<Publication>): Promise<Publication | null>;
 }

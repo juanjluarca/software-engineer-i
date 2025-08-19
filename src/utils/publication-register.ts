@@ -11,6 +11,6 @@ export default class PublicationRegister {
 
     public async run(title: string, description: string, author: string) {
         const publication = Publication.create(title, description, author);
-        await this.repository.save(publication);
+        await this.repository.savePublication(publication);
     }
 }
