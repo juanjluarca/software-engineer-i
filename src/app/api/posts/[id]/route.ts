@@ -9,9 +9,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 
         const data = await request.json();
 
-        // const repository = new PostgresPublicationRepository();
-        const repository = new InMemoryPublicationRepository();
-        const updatedPublication = await repository.updatePublication(id, data);
+        const repository = new PostgresPublicationRepository();
+        // const repository = new InMemoryPublicationRepository();
+        const register = new PublicationRegister(repository);
+
+        const updatedPublication = await register.update(id, data);
 
         if (!updatedPublication) {
             return NextResponse.json(
@@ -36,10 +38,11 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
-        // const repository = new PostgresPublicationRepository();
-        const repository = new InMemoryPublicationRepository();
+        const repository = new PostgresPublicationRepository();
+        // const repository = new InMemoryPublicationRepository();
+        const register = new PublicationRegister(repository);
 
-        const deletedPublication = await repository.deletePublication(id);
+        const deletedPublication = await register.delete(id);
         return NextResponse.json({
             message: `Post ${id} has been deleted`,
             data: deletedPublication,
