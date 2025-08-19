@@ -3,14 +3,14 @@ import PublicationRegister from "@/utils/publication-register";
 import PostgresPublicationRepository from "@/utils/postgres-publication-repository";
 import InMemoryPublicationRepository from "@/utils/in-memory-publication-repository";
 
-export async function PUT(request: Request, { params }: any) {
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
 
         const data = await request.json();
 
-        const repository = new PostgresPublicationRepository();
-        // const repository = new InMemoryPublicationRepository();
+        // const repository = new PostgresPublicationRepository();
+        const repository = new InMemoryPublicationRepository();
         const updatedPublication = await repository.updatePublication(id, data);
 
         if (!updatedPublication) {
@@ -28,6 +28,26 @@ export async function PUT(request: Request, { params }: any) {
         console.error(error);
         return NextResponse.json(
             { error: "Failed to update the publication" },
+            { status: 500 }
+        );
+    }
+}
+
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    try {
+        const { id } = await params;
+        // const repository = new PostgresPublicationRepository();
+        const repository = new InMemoryPublicationRepository();
+
+        const deletedPublication = await repository.deletePublication(id);
+        return NextResponse.json({
+            message: `Post ${id} has been deleted`,
+            data: deletedPublication,
+        });
+    } catch (error) {
+        console.error(error);
+        return NextResponse.json(
+            { error: "Failed to delete the publication" },
             { status: 500 }
         );
     }

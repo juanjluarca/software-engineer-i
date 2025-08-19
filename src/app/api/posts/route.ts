@@ -7,8 +7,8 @@ import InMemoryPublicationRepository from "@/utils/in-memory-publication-reposit
 export async function POST(request: NextRequest) {
     try {
         const data = await request.json();
-        const repository = new PostgresPublicationRepository();
-        // const repository = new InMemoryPublicationRepository();
+        // const repository = new PostgresPublicationRepository();
+        const repository = new InMemoryPublicationRepository();
         const register = new PublicationRegister(repository);
         await register.run(data.title, data.description, data.author);
         return NextResponse.json({
@@ -26,7 +26,9 @@ export async function POST(request: NextRequest) {
 // Inyeccion de dependencias
 export async function GET() {
     try {
-        const repository = new PostgresPublicationRepository();
+        // const repository = new PostgresPublicationRepository();
+        const repository = new InMemoryPublicationRepository();
+
         const data = await repository.getPublications();
 
         return NextResponse.json({

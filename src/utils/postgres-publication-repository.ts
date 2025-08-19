@@ -53,4 +53,17 @@ export default class PostgresPublicationRepository implements PublicationReposit
         }
     }
 
+    async deletePublication(id: string): Promise<Publication | null> {
+        try {
+            const [row] = await this.sql`DELETE FROM publication WHERE id = ${id} RETURNING *;`;
+
+            if (!row) return null;
+
+            return Publication.create(row.title, row.description, row.author);
+        } catch (error) {
+            throw new Error("Failed to delete publication");
+        }
+    }
+
+
 }
